@@ -1,0 +1,234 @@
+[
+    {
+        "id": "11EE-5D05",
+        "status": "LIVE",
+        "name": "WITHDRAW_MONTHLY_OCT_ES_AMT",
+        "tenant": "ABC",
+        "namespace": "TEST_NAMESPACE",
+        "jurisdiction": "ES",
+        "entity_type": "ACCOUNT",
+        "tags": [
+            "migrated_from:ACC_WITHDRAW_MONTHLY_OCT_ES_AMT_MERCNAHT",
+            "COMPLIANCE",
+            "LDS_EXCLUSIVE"
+        ],
+        "discoverable": true,
+        "revocable": true,
+        "active": true,
+        "outcomes": [
+            {
+                "_type": "CapabilityOutcome",
+                "capability": {
+                    "id": "ACCOUNT_WITHDRAW_MONEY_OCT_OR_OCT_FAST_FUNDS",
+                    "name": "WITHDRAW_MONEY",
+                    "dimensions": [
+                        {
+                            "operator": "ONE_OF",
+                            "association": null,
+                            "key": "Payment_method",
+                            "values": [
+                                "OCT",
+                                "OCT_FAST_FUNDS"
+                            ]
+                        }
+                    ],
+                    "directives": null
+                },
+                "grace_period": null
+            }
+        ],
+        "applicability_condition_expression": {
+            "_type": "AccountTypeCondition",
+            "comparator": "IS_ONE_OF",
+            "expected_types": [
+                "BUSINESS"
+            ]
+        },
+        "activation_expression": {
+            "trigger_expression": {
+                "_type": "ThresholdTrigger",
+                "threshold_definition_identifier": {
+                    "id": "ACC_WITHDRAW_MONEY_ES_OC_CARD_MONTHLY_30K_EUR",
+                    "name": "ES_OCT_WITHDRAW_AMOUNT_1M_FIXED_MERCHANT",
+                    "counter_definition_identifier": {
+                        "counter_name": "ES_OCT_WITHDRAW_AMOUNT_1M_FIXED"
+                    }
+                },
+                "type": "BREACH_ATTEMPTED"
+            }
+        }
+    },
+    {
+        "id": "11EE-220A",
+        "status": "LIVE",
+        "name": "CRYPTO",
+        "tenant": "XYZ",
+        "namespace": "TEST_NAMESPACE",
+        "jurisdiction": "US",
+        "entity_type": "ACCOUNT",
+        "tags": [
+            "migrated_from:ACC_XYZ_SELL_CRYPTO_ANONYMOUS_US_V1"
+        ],
+        "discoverable": true,
+        "revocable": true,
+        "active": true,
+        "outcomes": [
+            {
+                "_type": "CapabilityOutcome",
+                "capability": {
+                    "id": "ACCOUNT_SELL_CRYPTO",
+                    "name": "RECEIVE_MONEY",
+                    "dimensions": [
+                        {
+                            "operator": "ONE_OF",
+                            "association": null,
+                            "key": "payment_exchange_mode",
+                            "values": [
+                                "TRADE"
+                            ]
+                        },
+                        {
+                            "operator": "ONE_OF",
+                            "association": null,
+                            "key": "payment_type",
+                            "values": [
+                                "CRYPTO"
+                            ]
+                        }
+                    ],
+                    "directives": null
+                },
+                "grace_period": null
+            }
+        ],
+        "requirement_expression": {
+            "_type": "ProcessRequirement",
+            "process_definition_identifier": {
+                "name": "XYZ_SELL_CRYPTO",
+                "version": "1"
+            }
+        },
+        "applicability_condition_expression": {
+            "_type": "CompositeCondition",
+            "operator": "AND",
+            "child_conditions": [
+                {
+                    "_type": "AccountTenantNameCondition",
+                    "comparator": "IS_ONE_OF",
+                    "expected_names": [
+                        "XYZ"
+                    ]
+                },
+                {
+                    "_type": "AccountTypeCondition",
+                    "comparator": "IS_ONE_OF",
+                    "expected_names": [
+                        "PERSONAL",
+                        "ANONYMOUS"
+                    ]
+                }
+            ]
+            
+        }
+    },
+    {
+        "id": "11EE-AAE5",
+        "status": "LIVE",
+        "name": "MANAGED_PATH_KYC_VERIFICATION",
+        "tenant": "ABC",
+        "namespace": "TEST_NAMESPACE",
+        "jurisdiction": "US",
+        "entity_type": "ACCOUNT",
+        "tags": [
+            "migrated_from:ACC_RECV_APPLE_PAY_BIZ_US_MP_KYC_VERF_EPP_RP_30D_V1"
+        ],
+        "discoverable": true,
+        "revocable": false,
+        "active": true,
+        "outcomes": [
+            {
+                "_type": "CapabilityOutcome",
+                "capability": {
+                    "id": "ACCOUNT_RECEIVE_MONEY_UNBRANDED_APPLE_PAY",
+                    "name": "RECEIVE_MONEY",
+                    "dimensions": [
+                        {
+                            "operator": "ONE_OF",
+                            "association": null,
+                            "key": "fi_wallet",
+                            "values": [
+                                "APPLE_PAY"
+                            ]
+                        },
+                        {
+                            "operator": "ONE_OF",
+                            "association": null,
+                            "key": "fi_type",
+                            "values": [
+                                "CARD"
+                            ]
+                        },
+                        {
+                            "operator": "ONE_OF",
+                            "association": null,
+                            "key": "payment_integration",
+                            "values": [
+                                "UNBRANDED"
+                            ]
+                        }
+                    ],
+                    "directives": null
+                },
+                "grace_period": null
+            },
+            {
+                "_type": "PolicyEnforcementOutcome",
+                "grace_period": {
+                    "size": 30,
+                    "unit": "DAY",
+                    "start_point": "POLICY_ENFORCEMENT",
+                    "grace_period_milestones": null
+                }
+            }
+        ],
+        "requirement_expression": {
+            "_type": "ProcessRequirement",
+            "process_definition_identifier": {
+                "name": "MANAGED_PATH_KYC_VERIFICATION",
+                "version": "1"
+            }
+        },
+        "applicability_condition_expression": {
+            "_type": "CompositeCondition",
+            "operator": "AND",
+            "child_conditions": [
+                {
+                    "_type": "AccountTypeCondition",
+                    "comparator": "IS_ONE_OF",
+                    "expected_names": [
+                        "BUSINESS"
+                    ]
+                },
+                {
+                    "_type": "AccountIsManagedCondition",
+                    "managed_account": true
+                },
+                {
+                    "_type": "AccountTenantNameCondition",
+                    "comparator": "IS_ONE_OF",
+                    "expected_names": [
+                        "ABC"
+                    ]
+                },
+                {
+                    "_type": "AccountTenantHierarchyCondition",
+                    "comparator": "IS_ONE_OF",
+                    "expected_paths": [
+                        "ABC.MAMMSPartner:*",
+                        "ABC.EPP_STANDARD_POLICY:US"
+                    ]
+                }
+            ]
+        }
+    }
+]
